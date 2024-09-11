@@ -1,2 +1,2 @@
-SECRET_KEY = 'your_secret_key'
+SECRET_KEY = '123321'
 SQLALCHEMY_DATABASE_URI = 'sqlite:///site.db'

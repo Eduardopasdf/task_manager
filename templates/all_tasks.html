@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Tasks</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .sidebar {
+            height: 100vh;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #007bff;
+            color: #ffffff;
+            padding-top: 20px;
+        }
+        .sidebar a {
+            color: #ffffff;
+            padding: 15px;
+            text-decoration: none;
+            display: block;
+        }
+        .sidebar a:hover {
+            background-color: #0056b3;
+            color: #e0e0e0;
+        }
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+        .card {
+            border: 1px solid #007bff;
+            border-radius: 0.5rem;
+        }
+        .card-header {
+            background-color: #007bff;
+            color: #ffffff;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+        .card-body {
+            background-color: #ffffff;
+        }
+        .badge {
+            font-size: 0.875rem;
+            padding: 0.5em 0.75em;
+            border-radius: 0.25rem;
+        }
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            border-radius: 0.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        {% if 'user_id' in session %}
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('all_tasks') }}">All Tasks</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+            <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('register') }}">Register</a>
+        {% endif %}
+    </div>
+    <div class="content">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="{{ url_for('index') }}">Task Manager</a>
+        </nav>
+        <div class="container mt-4">
+            <h1 class="mb-4">All Tasks</h1>
+            <div class="task-list">
+                {% for task in tasks %}
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            {{ task.title }}
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">{{ task.description }}</p>
+                            <span class="badge
+                                  {% if task.status == 'pendente' %} badge-warning
+                                  {% elif task.status == 'em_progresso' %} badge-info
+                                  {% elif task.status == 'concluida' %} badge-success
+                                  {% endif %}">
+                                {{ task.status }}
+                            </span>
+                            <p class="mt-2"><strong>User:</strong> {{ task.owner.username }}</p> <!-- Exibindo o dono -->
+                            <div class="mt-3">
+                                <a href="{{ url_for('edit_task', task_id=task.id) }}" class="btn btn-primary btn-sm">Editar</a>
+                                <a href="{{ url_for('delete_task', task_id=task.id) }}" class="btn btn-danger btn-sm">Excluir</a>
+                                <a href="{{ url_for('change_task_owner', task_id=task.id) }}" class="btn btn-warning btn-sm">Mudar Dono</a>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <p>Não há tarefas para exibir.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

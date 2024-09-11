@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Painel</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
@@ -52,17 +52,17 @@
 
     <div class="sidebar">
         {% if 'user_id' in session %}
-            <a href="{{ url_for('dashboard') }}">Dashboard</a>
-            <a href="{{ url_for('logout') }}">Logout</a>
+            <a href="{{ url_for('dashboard') }}">Painel</a>
+            <a href="{{ url_for('logout') }}">Desconectar</a>
         {% else %}
-            <a href="{{ url_for('login') }}">Login</a>
-            <a href="{{ url_for('register') }}">Register</a>
+            <a href="{{ url_for('login') }}">Entrar</a>
+            <a href="{{ url_for('register') }}">Registrar</a>
         {% endif %}
     </div>
 
     <div class="content">
         <nav class="navbar navbar-expand-lg navbar-light">
-            <a class="navbar-brand" href="{{ url_for('index') }}">Task Manager</a>
+            <a class="navbar-brand" href="{{ url_for('index') }}">Gerenciador de Tarefas</a>
         </nav>
         <div class="container mt-4">
             <h2>Bem-vindo, {{ username }}!</h2>
@@ -72,9 +72,7 @@
             <br>
 
             <!-- Botões e filtros -->
-            <a href="{{ url_for('index') }}" class="btn btn-secondary mb-3">Voltar à Página Inicial</a>
-            <a href="{{ url_for('all_tasks') }}" class="btn btn-secondary mb-3">Ver Todas as Tarefas</a>
-            <a href="{{ url_for('logout') }}" class="btn btn-secondary mb-3">Logout</a>
+            <a href="{{ url_for('all_tasks') }}" class="btn btn-primary mb-3">Ver Todas as Tarefas</a>
             <a href="{{ url_for('task_form') }}" class="btn btn-primary mb-3">Criar Nova Tarefa</a>
 
             <div class="filters mb-3">

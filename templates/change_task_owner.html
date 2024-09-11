@@ -51,36 +51,36 @@
 <body>
     <div class="sidebar">
         {% if 'user_id' in session %}
-            <a href="{{ url_for('dashboard') }}">Dashboard</a>
-            <a href="{{ url_for('all_tasks') }}">All Tasks</a>
-            <a href="{{ url_for('logout') }}">Logout</a>
+            <a href="{{ url_for('dashboard') }}">Painel</a>
+            <a href="{{ url_for('all_tasks') }}">Todas as Tarefas</a>
+            <a href="{{ url_for('logout') }}">Deslogar</a>
         {% else %}
-            <a href="{{ url_for('login') }}">Login</a>
-            <a href="{{ url_for('register') }}">Register</a>
+            <a href="{{ url_for('login') }}">Entrar</a>
+            <a href="{{ url_for('register') }}">Registrar</a>
         {% endif %}
     </div>
     <div class="content">
         <nav class="navbar navbar-expand-lg navbar-light">
-            <a class="navbar-brand" href="{{ url_for('index') }}">Task Manager</a>
+            <a class="navbar-brand" href="{{ url_for('index') }}">Gerenciador de Tarefas</a>
         </nav>
         <div class="container mt-4">
-            <h1>Change Task Owner</h1>
+            <h1>Alterar proprietário da tarefa</h1>
             <form method="POST">
                 <div class="form-group">
-                    <label for="taskTitle">Task Title</label>
+                    <label for="taskTitle">Titulo da tarefa</label>
                     <input type="text" class="form-control" id="taskTitle" value="{{ task.title }}" readonly>
                 </div>
                 <div class="form-group">
-                    <label for="newUser">Select New Owner</label>
+                    <label for="newUser">Selecionar novo Proprietário</label>
                     <select class="form-control" id="newUser" name="new_user_id">
                         {% for user in users %}
                         <option value="{{ user.id }}">{{ user.username }}</option>
                         {% endfor %}
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary">Change Owner</button>
+                <button type="submit" class="btn btn-primary">Alterar proprietário</button>
             </form>
-            <a class="btn btn-secondary mt-3" href="{{ url_for('all_tasks') }}">Back to All Tasks</a>
+            <a class="btn btn-secondary mt-3" href="{{ url_for('all_tasks') }}">Voltar para todas as Tarefas</a>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

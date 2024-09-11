@@ -5,53 +5,113 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .sidebar {
+            height: 100vh;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #007bff;
+            color: #ffffff;
+            padding-top: 20px;
+        }
+        .sidebar a {
+            color: #ffffff;
+            padding: 15px;
+            text-decoration: none;
+            display: block;
+        }
+        .sidebar a:hover {
+            background-color: #0056b3;
+            color: #e0e0e0;
+        }
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+    </style>
 </head>
 <body>
-<div class="container mt-5">
-    <h2>Suas Tarefas</h2>
 
-    <!-- Botão para voltar à página inicial -->
-    <a href="{{ url_for('index') }}" class="btn btn-secondary mb-3">Voltar à Página Inicial</a>
-    <a href="{{ url_for('all_tasks') }}" class="btn btn-secondary mb-3">Ver Todas as Tarefas</a>
-
-    <!-- Botão para criar uma nova tarefa -->
-    <a href="{{ url_for('task_form') }}" class="btn btn-primary mb-3">Criar Nova Tarefa</a>
-
-    <!-- Filtros de Status -->
-    <div class="filters mb-3">
-        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary {% if not status_filter %}active{% endif %}">Todas</a>
-        <a href="{{ url_for('dashboard', status='pendente') }}" class="btn btn-warning {% if status_filter == 'pendente' %}active{% endif %}">Pendente</a>
-        <a href="{{ url_for('dashboard', status='em_progresso') }}" class="btn btn-info {% if status_filter == 'em_progresso' %}active{% endif %}">Em Progresso</a>
-        <a href="{{ url_for('dashboard', status='concluida') }}" class="btn btn-success {% if status_filter == 'concluida' %}active{% endif %}">Concluída</a>
-    </div>
-
-    <!-- Lista de Tarefas -->
-    <div class="task-list">
-        {% for task in tasks %}
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h4 class="card-title">{{ task.title }}</h4>
-                    <p class="card-text">{{ task.description }}</p>
-                    <span class="badge
-                          {% if task.status == 'pendente' %} badge-warning
-                          {% elif task.status == 'em_progresso' %} badge-info
-                          {% elif task.status == 'concluida' %} badge-success
-                          {% endif %}">
-                        {{ task.status }}
-                    </span>
-                    <a href="{{ url_for('edit_task', task_id=task.id) }}" class="btn btn-primary btn-sm">Editar</a>
-                    <a href="{{ url_for('delete_task', task_id=task.id) }}" class="btn btn-danger btn-sm">Excluir</a>
-                    <a href="{{ url_for('change_task_owner', task_id=task.id) }}" class="btn btn-warning btn-sm">Mudar Dono</a>
-                </div>
-            </div>
+    <div class="sidebar">
+        {% if 'user_id' in session %}
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
         {% else %}
-            <p>Não há tarefas para exibir.</p>
-        {% endfor %}
+            <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('register') }}">Register</a>
+        {% endif %}
     </div>
-</div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <div class="content">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <a class="navbar-brand" href="{{ url_for('index') }}">Task Manager</a>
+        </nav>
+        <div class="container mt-4">
+            <h2>Bem-vindo, {{ username }}!</h2>
+
+            <br>
+            <h3>Suas Tarefas</h3>
+            <br>
+
+            <!-- Botões e filtros -->
+            <a href="{{ url_for('index') }}" class="btn btn-secondary mb-3">Voltar à Página Inicial</a>
+            <a href="{{ url_for('all_tasks') }}" class="btn btn-secondary mb-3">Ver Todas as Tarefas</a>
+            <a href="{{ url_for('logout') }}" class="btn btn-secondary mb-3">Logout</a>
+            <a href="{{ url_for('task_form') }}" class="btn btn-primary mb-3">Criar Nova Tarefa</a>
+
+            <div class="filters mb-3">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary {% if not status_filter %}active{% endif %}">Todas</a>
+                <a href="{{ url_for('dashboard', status='pendente') }}" class="btn btn-warning {% if status_filter == 'pendente' %}active{% endif %}">Pendente</a>
+                <a href="{{ url_for('dashboard', status='em_progresso') }}" class="btn btn-info {% if status_filter == 'em_progresso' %}active{% endif %}">Em Progresso</a>
+                <a href="{{ url_for('dashboard', status='concluida') }}" class="btn btn-success {% if status_filter == 'concluida' %}active{% endif %}">Concluída</a>
+            </div>
+
+            <!-- Lista de tarefas -->
+            <div class="task-list">
+                {% for task in tasks %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ task.title }}</h4>
+                            <p class="card-text">{{ task.description }}</p>
+                            <span class="badge
+                                {% if task.status == 'pendente' %} badge-warning
+                                {% elif task.status == 'em_progresso' %} badge-info
+                                {% elif task.status == 'concluida' %} badge-success
+                                {% endif %}">
+                                {{ task.status }}
+                            </span>
+                            <a href="{{ url_for('edit_task', task_id=task.id) }}" class="btn btn-primary btn-sm">Editar</a>
+                            <a href="{{ url_for('delete_task', task_id=task.id) }}" class="btn btn-danger btn-sm">Excluir</a>
+                            <a href="{{ url_for('change_task_owner', task_id=task.id) }}" class="btn btn-warning btn-sm">Mudar Dono</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <p>Não há tarefas para exibir.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

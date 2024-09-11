@@ -117,7 +117,8 @@ def dashboard():
     else:
         tasks = Task.query.filter_by(user_id=user.id).all()
 
-    return render_template('dashboard.html', tasks=tasks)
+    return render_template('dashboard.html', tasks=tasks, username=user.username)
+
 
 
 @app.route('/task_form', methods=['GET', 'POST'])
